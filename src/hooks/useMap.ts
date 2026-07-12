@@ -9,36 +9,25 @@ export function useMap(
 ) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mapInstance = ref<any>(null);
-  // 将自己拿到的天地图tk填入下面url
-  const TIANDITU_TK = import.meta.env.VITE_TIANDITU_TK as string;
+  // 改用 OpenStreetMap 镜像瓦片（支持跨域，无需密钥，国内连通性好）
   const inlineMapStyle = {
     version: 8 as const,
     sources: {
-      tiandituVec: {
+      osm_source: {
         type: "raster" as const,
-        tiles: [
-          `https://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=${TIANDITU_TK}`,
-        ],
+        tiles: ["https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"],
         tileSize: 256,
-      },
-      tiandituCva: {
-        type: "raster" as const,
-        tiles: [
-          `https://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=${TIANDITU_TK}`,
-        ],
-        tileSize: 256,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       },
     },
     layers: [
       {
-        id: "tianditu-base",
+        id: "osm-base",
         type: "raster" as const,
-        source: "tiandituVec",
-      },
-      {
-        id: "tianditu-cva",
-        type: "raster" as const,
-        source: "tiandituCva",
+        source: "osm_source",
+        minzoom: 0,
+        maxzoom: 19,
       },
     ],
   };
@@ -47,7 +36,6 @@ export function useMap(
     // DOM挂载完成后初始化地图
     mapInstance.value = new maplibregl.Map({
       container: containerId,
-      // 使用内联天地图样式（自动注入 TK）
       style: inlineMapStyle,
       center: initCenter,
       zoom: initZoom,
