@@ -1,0 +1,32 @@
+{
+  "version": 8,
+  "name": "tianditu-hybrid",
+  "sources": {
+    "tianditu-vec": {
+      "type": "raster",
+      "tiles": [
+        "https://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=YOUR_TIANDITU_TK_HERE"
+      ],
+      "tileSize": 256
+    },
+    "tianditu-cva": {
+      "type": "raster",
+      "tiles": [
+        "https://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=YOUR_TIANDITU_TK_HERE"
+      ],
+      "tileSize": 256
+    }
+  },
+  "layers": [
+    {
+      "id": "tianditu-vec-layer",
+      "type": "raster",
+      "source": "tianditu-vec"
+    },
+    {
+      "id": "tianditu-cva-layer",
+      "type": "raster",
+      "source": "tianditu-cva"
+    }
+  ]
+}
